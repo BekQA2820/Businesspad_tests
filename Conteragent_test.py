@@ -248,8 +248,8 @@ def test_add_and_edit_counteragent(driver):
     # Кликаем по кнопке "Изменить"
     change_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Изменить']")))
     change_button.click()
-    attach_screenshot(driver, "Контрагент отредактирован")
     time.sleep(5)
+    attach_screenshot(driver, "Контрагент отредактирован")
     # Удаляем
     with allure.step("Удаление"):
         try:
