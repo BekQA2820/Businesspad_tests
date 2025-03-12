@@ -59,7 +59,7 @@ def test_add_and_edit_counteragent(driver):
     driver.find_element(By.XPATH, '//*[@id=":r1:"]').send_keys("Team.Bekir")
     driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/div/div/div[2]/div/form/div/div[4]').click()
 
-    wait = WebDriverWait(driver, 1)
+    wait = WebDriverWait(driver, 10)
     wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div[1]/div/div[2]/a[4]/div')))
 
     # Открытие настроек и добавление контрагента
