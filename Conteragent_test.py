@@ -59,7 +59,7 @@ def test_add_and_edit_counteragent(driver):
     driver.find_element(By.XPATH, '//*[@id=":r1:"]').send_keys("Team.Bekir")
     driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/div/div/div[2]/div/form/div/div[4]').click()
 
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 1)
     wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div[1]/div/div[2]/a[4]/div')))
 
     # Открытие настроек и добавление контрагента
@@ -71,13 +71,17 @@ def test_add_and_edit_counteragent(driver):
     wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="main"]/div/div/div[1]/div[1]/button'))).click()
 
     # Открываем генератор ИНН в новой вкладке
-    driver.switch_to.new_window("tab")
-    driver.get("https://generand.ru/html/inn12.html")
+    driver.execute_script("window.open('https://randvar.ru/generator/personal/inn', '_blank');")
+    driver.switch_to.window(driver.window_handles[1])
 
-    # Генерируем ИНН
-    wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="MainText"]/div[5]/input[2]'))).click()
-    inn_value = wait.until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="MainText"]/div[5]/input[1]'))).get_attribute("value")
+    # Ждем, пока элемент с ИНН станет кликабельным и кликаем по нему
+    inn_element = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, "div.result-item[role='button']"))
+    )
+    inn_element.click()
+
+    # Получаем значение ИНН из элемента
+    inn_value = inn_element.text
 
     # Закрываем вкладку с генератором ИНН и возвращаемся обратно
     driver.close()
@@ -93,7 +97,7 @@ def test_add_and_edit_counteragent(driver):
     with allure.step("Заполняем данные контрагента"):
         wait.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Введите ИНН']"))).send_keys(
             inn_value)
-    time.sleep(1)# Инн
+    # Инн
     # Проверяем, активна ли кнопка "Добавить"
     add_button = wait.until(
     EC.presence_of_element_located((By.XPATH, "//button[@type='submit' and text()='Добавить']")))
@@ -102,7 +106,7 @@ def test_add_and_edit_counteragent(driver):
     print(" Все ок! Кнопка 'Добавить' неактивна.")
     #Название
     driver.find_element(By.XPATH, "//input[@placeholder='Введите название']").send_keys(unique_company_name)
-    time.sleep(1)
+
     # Проверяем, активна ли кнопка "Добавить"
     add_button = wait.until(
         EC.presence_of_element_located((By.XPATH, "//button[@type='submit' and text()='Добавить']")))
@@ -111,7 +115,7 @@ def test_add_and_edit_counteragent(driver):
     print(" Все ок! Кнопка 'Добавить' неактивна.")
     #Фио
     driver.find_element(By.XPATH, "//input[@placeholder='Введите ФИО']").send_keys(unique_full_name)
-    time.sleep(1)
+
     # Проверяем, активна ли кнопка "Добавить"
     add_button = wait.until(
         EC.presence_of_element_located((By.XPATH, "//button[@type='submit' and text()='Добавить']")))
@@ -120,7 +124,7 @@ def test_add_and_edit_counteragent(driver):
     print(" Все ок! Кнопка 'Добавить' неактивна.")
     #email
     driver.find_element(By.XPATH, "//input[@placeholder='Введите Email']").send_keys(unique_email)
-    time.sleep(1)
+
     # Проверяем, активна ли кнопка "Добавить"
     add_button = wait.until(
         EC.presence_of_element_located((By.XPATH, "//button[@type='submit' and text()='Добавить']")))
@@ -129,7 +133,7 @@ def test_add_and_edit_counteragent(driver):
     print(" Все ок! Кнопка 'Добавить' неактивна.")
     #телефон
     driver.find_element(By.XPATH, "//input[@placeholder='Введите номер телефона']").send_keys(unique_phone_number)
-    time.sleep(1)
+
     # Проверяем, активна ли кнопка "Добавить"
     add_button = wait.until(
         EC.presence_of_element_located((By.XPATH, "//button[@type='submit' and text()='Добавить']")))
@@ -145,11 +149,11 @@ def test_add_and_edit_counteragent(driver):
 
     # Нажимаем "Добавить"
     driver.find_element(By.XPATH, "//button[@type='submit' and text()='Добавить']").click()
-    time.sleep(3)
+
    #производители
     button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Производители')]")))
     button.click()
-    time.sleep(6)
+    time.sleep(1)
     attach_screenshot(driver, "Контрагент добавлен")
 # Ожидание троеточия и кликаем по нему
 
@@ -164,7 +168,7 @@ def test_add_and_edit_counteragent(driver):
         EC.element_to_be_clickable((By.XPATH, "//li[contains(@class, 'MuiMenuItem-root') and text()='Редактировать']"))
     )
     edit_button.click()
-    time.sleep(2)
+
 
     # Редактируем
     # Редактируем описание
@@ -188,7 +192,7 @@ def test_add_and_edit_counteragent(driver):
     contact_name_input.send_keys(Keys.CONTROL + "a")
     contact_name_input.send_keys(Keys.BACKSPACE)
     # Даем UI обновиться
-    time.sleep(2)
+
     # Проверяем, активна ли кнопка "Изменить"
     change_button = wait.until(EC.presence_of_element_located((By.XPATH, "//button[text()='Изменить']")))
     # Если кнопка активна, тест должен упасть
@@ -201,7 +205,7 @@ def test_add_and_edit_counteragent(driver):
     email_input.send_keys(Keys.CONTROL + "a")
     email_input.send_keys(Keys.BACKSPACE)
     # Даем UI обновиться
-    time.sleep(2)
+
     # Проверяем, активна ли кнопка "Изменить"
     change_button = wait.until(EC.presence_of_element_located((By.XPATH, "//button[text()='Изменить']")))
     # Если кнопка активна, тест должен упасть
@@ -216,7 +220,7 @@ def test_add_and_edit_counteragent(driver):
     phone_input.send_keys(Keys.CONTROL + "a")
     phone_input.send_keys(Keys.BACKSPACE)
     # Даем UI обновиться
-    time.sleep(2)
+    time.sleep(1)
     # Проверяем, активна ли кнопка "Изменить"
     change_button = wait.until(EC.presence_of_element_located((By.XPATH, "//button[text()='Изменить']")))
     # Если кнопка активна, тест должен упасть
@@ -236,19 +240,19 @@ def test_add_and_edit_counteragent(driver):
     name_input.send_keys(Keys.CONTROL + "a")
     name_input.send_keys(Keys.BACKSPACE)
     # Даем UI обновиться
-    time.sleep(2)
+
     # Проверяем, активна ли кнопка "Изменить"
     change_button = wait.until(EC.presence_of_element_located((By.XPATH, "//button[text()='Изменить']")))
     # Если кнопка активна, тест должен упасть
     assert not change_button.is_enabled(), " Ошибка! Кнопка активна при пустом названии!"
     print(" Все ок! Кнопка неактивна.")
-    time.sleep(1)
+
     name_input.send_keys("Идеальный автотест")
-    time.sleep(5)
+
     # Кликаем по кнопке "Изменить"
     change_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Изменить']")))
     change_button.click()
-    time.sleep(5)
+    time.sleep(2)
     attach_screenshot(driver, "Контрагент отредактирован")
     # Удаляем
     with allure.step("Удаление"):
@@ -261,5 +265,5 @@ def test_add_and_edit_counteragent(driver):
     delete_button = wait.until(
     EC.element_to_be_clickable((By.XPATH, "//li[contains(@class, 'MuiMenuItem-root') and text()='Удалить']")))
     delete_button.click()
-    time.sleep(10)
+    time.sleep(1)
     attach_screenshot(driver, "Контрагент удален")
