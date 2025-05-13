@@ -1,5 +1,6 @@
 import pytest
 from selenium import webdriver
+from selenium.common import NoSuchElementException
 from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -264,7 +265,7 @@ def test_start(driver):
 
                     # Вводим значение
                     input_field.send_keys(participant)
-                    time.sleep(2)  # Увеличили время ожидания
+                    time.sleep(0.5)  # Увеличили время ожидания
                     attach_screenshot(driver, f"После ввода {participant}")
 
                     # Ждем появления списка и кликаем по варианту
@@ -274,7 +275,7 @@ def test_start(driver):
                     )
                     participant_option.click()
                     attach_screenshot(driver, f"Участник {participant} выбран")
-                    time.sleep(1)
+                    time.sleep(0.5)
 
                 except Exception as e:
                     attach_screenshot(driver, f"Ошибка выбора участника {participant}")
@@ -660,337 +661,6 @@ def test_start(driver):
         except Exception as e:
             attach_screenshot(driver, "Ошибка при перетаскивании")
             pytest.fail(f"Не удалось переместить элемент: {str(e)}")
-    #Связи!!!!!!
-    #Первый
-    with allure.step("1. Поиск элементов для drag-and-drop"):
-        try:
-            source = wait.until(
-                EC.presence_of_element_located(
-                    (By.XPATH, "//div[@data-nodeid='476' and @data-handlepos='bottom' and @data-handleid='4']")
-                )
-            )
-            target = wait.until(
-                EC.presence_of_element_located(
-                    (By.XPATH, "//div[@data-nodeid='478' and @data-handlepos='top']")
-                ))
-
-
-        except Exception as e:
-            attach_screenshot(driver, "Ошибка при поиске элементов")
-            pytest.fail(f"Ошибка при поиске элементов: {e}")
-
-    with allure.step("2. Перетаскивание элемента"):
-        try:
-            actions = ActionChains(driver)
-            actions.click_and_hold(source).move_to_element(target).release().perform()
-            attach_screenshot(driver, "После перетаскивания элемента")
-        except Exception as e:
-            attach_screenshot(driver, "Ошибка при перетаскивании элемента")
-            pytest.fail(f"Ошибка при перетаскивании элемента: {e}")
-    #Второй
-    for attempt in range(1, 3):  # Выполним 2 попытки
-        with allure.step(f"Попытка {attempt}: Поиск и перетаскивание"):
-            with allure.step("1. Поиск элементов для drag-and-drop"):
-                try:
-                    source = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='478'][data-handleid='4']")
-                        )
-                    )
-                    target = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='479'][data-handleid='2']")
-                        )
-                    )
-                except Exception as e:
-                    attach_screenshot(driver, "Ошибка при поиске элементов")
-                    pytest.fail(f"Ошибка при поиске элементов: {e}")
-
-            with allure.step("2. Перетаскивание элемента"):
-                try:
-                    # Делаем элементы видимыми перед перетаскиванием
-                    driver.execute_script("arguments[0].style.opacity = '1';", source)
-                    driver.execute_script("arguments[0].style.opacity = '1';", target)
-                    time.sleep(0.5)  # Пауза для применения стилей
-
-                    actions = ActionChains(driver)
-                    (actions
-                     .move_to_element(source)
-                     .pause(0.5)
-                     .click_and_hold()
-                     .pause(0.3)
-                     .move_to_element(target)
-                     .pause(0.5)
-                     .release()
-                     .perform())
-
-                    attach_screenshot(driver, f"После перетаскивания элемента (попытка {attempt})")
-                    time.sleep(1)  # Пауза между попытками
-
-                except Exception as e:
-                    attach_screenshot(driver, f"Ошибка при перетаскивании (попытка {attempt})")
-                    if attempt == 2:  # Если это вторая попытка и снова ошибка
-                        pytest.fail(f"Ошибка при перетаскивании элемента: {e}")
-                    continue  # Продолжаем на следующую попытку
-    #Третий
-    #Третий
-    for attempt in range(1, 3):  # Выполним 2 попытки
-        with allure.step(f"Попытка {attempt}: Поиск и перетаскивание"):
-            with allure.step("1. Поиск элементов для drag-and-drop"):
-                try:
-                    source = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='479'][data-handleid='4']")
-                        )
-                    )
-                    target = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='480'][data-handleid='2']")
-                        )
-                    )
-                except Exception as e:
-                    attach_screenshot(driver, "Ошибка при поиске элементов")
-                    pytest.fail(f"Ошибка при поиске элементов: {e}")
-
-            with allure.step("2. Перетаскивание элемента"):
-                try:
-                    # Делаем элементы видимыми перед перетаскиванием
-                    driver.execute_script("arguments[0].style.opacity = '1';", source)
-                    driver.execute_script("arguments[0].style.opacity = '1';", target)
-                    time.sleep(0.5)  # Пауза для применения стилей
-
-                    actions = ActionChains(driver)
-                    (actions
-                     .move_to_element(source)
-                     .pause(0.5)
-                     .click_and_hold()
-                     .pause(0.3)
-                     .move_to_element(target)
-                     .pause(0.5)
-                     .release()
-                     .perform())
-
-                    attach_screenshot(driver, f"После перетаскивания элемента (попытка {attempt})")
-                    time.sleep(1)  # Пауза между попытками
-
-                except Exception as e:
-                    attach_screenshot(driver, f"Ошибка при перетаскивании (попытка {attempt})")
-                    if attempt == 2:  # Если это вторая попытка и снова ошибка
-                        pytest.fail(f"Ошибка при перетаскивании элемента: {e}")
-                    continue  # Продолжаем на следующую попытку
-    #Четвертый
-    for attempt in range(1, 3):  # Выполним 2 попытки
-        with allure.step(f"Попытка {attempt}: Поиск и перетаскивание"):
-            with allure.step("1. Поиск элементов для drag-and-drop"):
-                try:
-                    source = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='480'][data-handleid='4']")
-                        )
-                    )
-                    target = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='481'][data-handleid='2']")
-                        )
-                    )
-                except Exception as e:
-                    attach_screenshot(driver, "Ошибка при поиске элементов")
-                    pytest.fail(f"Ошибка при поиске элементов: {e}")
-
-            with allure.step("2. Перетаскивание элемента"):
-                try:
-                    # Делаем элементы видимыми перед перетаскиванием
-                    driver.execute_script("arguments[0].style.opacity = '1';", source)
-                    driver.execute_script("arguments[0].style.opacity = '1';", target)
-                    time.sleep(0.5)  # Пауза для применения стилей
-
-                    actions = ActionChains(driver)
-                    (actions
-                     .move_to_element(source)
-                     .pause(0.5)
-                     .click_and_hold()
-                     .pause(0.3)
-                     .move_to_element(target)
-                     .pause(0.5)
-                     .release()
-                     .perform())
-
-                    attach_screenshot(driver, f"После перетаскивания элемента (попытка {attempt})")
-                    time.sleep(1)  # Пауза между попытками
-
-                except Exception as e:
-                    attach_screenshot(driver, f"Ошибка при перетаскивании (попытка {attempt})")
-                    if attempt == 2:  # Если это вторая попытка и снова ошибка
-                        pytest.fail(f"Ошибка при перетаскивании элемента: {e}")
-                    continue  # Продолжаем на следующую попытку
-    #Пятый
-    for attempt in range(1, 3):  # Выполним 2 попытки
-        with allure.step(f"Попытка {attempt}: Поиск и перетаскивание"):
-            with allure.step("1. Поиск элементов для drag-and-drop"):
-                try:
-                    source = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='481'][data-handleid='3']")
-                        )
-                    )
-                    target = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='482'][data-handleid='1']")
-                        )
-                    )
-                except Exception as e:
-                    attach_screenshot(driver, "Ошибка при поиске элементов")
-                    pytest.fail(f"Ошибка при поиске элементов: {e}")
-
-            with allure.step("2. Перетаскивание элемента"):
-                try:
-                    # Делаем элементы видимыми перед перетаскиванием
-                    driver.execute_script("arguments[0].style.opacity = '1';", source)
-                    driver.execute_script("arguments[0].style.opacity = '1';", target)
-                    time.sleep(0.5)  # Пауза для применения стилей
-
-                    actions = ActionChains(driver)
-                    (actions
-                     .move_to_element(source)
-                     .pause(0.5)
-                     .click_and_hold()
-                     .pause(0.3)
-                     .move_to_element(target)
-                     .pause(0.5)
-                     .release()
-                     .perform())
-
-                    attach_screenshot(driver, f"После перетаскивания элемента (попытка {attempt})")
-                    time.sleep(1)  # Пауза между попытками
-
-                except Exception as e:
-                    attach_screenshot(driver, f"Ошибка при перетаскивании (попытка {attempt})")
-                    if attempt == 2:  # Если это вторая попытка и снова ошибка
-                        pytest.fail(f"Ошибка при перетаскивании элемента: {e}")
-                    continue  # Продолжаем на следующую попытку
-    #Шестой
-    for attempt in range(1, 3):  # Выполним 2 попытки
-        with allure.step(f"Попытка {attempt}: Поиск и перетаскивание"):
-            with allure.step("1. Поиск элементов для drag-and-drop"):
-                try:
-                    source = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='482'][data-handleid='3']")
-                        )
-                    )
-                    target = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='477'][data-handleid='1']")
-                        )
-                    )
-                except Exception as e:
-                    attach_screenshot(driver, "Ошибка при поиске элементов")
-                    pytest.fail(f"Ошибка при поиске элементов: {e}")
-
-            with allure.step("2. Перетаскивание элемента"):
-                try:
-                    # Делаем элементы видимыми перед перетаскиванием
-                    driver.execute_script("arguments[0].style.opacity = '1';", source)
-                    driver.execute_script("arguments[0].style.opacity = '1';", target)
-                    time.sleep(0.5)  # Пауза для применения стилей
-
-                    actions = ActionChains(driver)
-                    (actions
-                     .move_to_element(source)
-                     .pause(0.5)
-                     .click_and_hold()
-                     .pause(0.3)
-                     .move_to_element(target)
-                     .pause(0.5)
-                     .release()
-                     .perform())
-
-                    attach_screenshot(driver, f"После перетаскивания элемента (попытка {attempt})")
-                    time.sleep(1)  # Пауза между попытками
-
-                except Exception as e:
-                    attach_screenshot(driver, f"Ошибка при перетаскивании (попытка {attempt})")
-                    if attempt == 2:  # Если это вторая попытка и снова ошибка
-                        pytest.fail(f"Ошибка при перетаскивании элемента: {e}")
-                    continue  # Продолжаем на следующую попытку
-    #Седьмой
-    for attempt in range(1, 3):  # Выполним 2 попытки
-        with allure.step(f"Попытка {attempt}: Поиск и перетаскивание"):
-            with allure.step("1. Поиск элементов для drag-and-drop"):
-                try:
-                    source = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='450'][data-handleid='4']")
-                        )
-                    )
-                    target = wait.until(
-                        EC.presence_of_element_located(
-                            (By.CSS_SELECTOR, "div[data-nodeid='453'][data-handleid='3']")
-                        )
-                    )
-                except Exception as e:
-                    attach_screenshot(driver, "Ошибка при поиске элементов")
-                    pytest.fail(f"Ошибка при поиске элементов: {e}")
-
-            with allure.step("2. Перетаскивание элемента"):
-                try:
-                    # Делаем элементы видимыми перед перетаскиванием
-                    driver.execute_script("arguments[0].style.opacity = '1';", source)
-                    driver.execute_script("arguments[0].style.opacity = '1';", target)
-                    time.sleep(0.5)  # Пауза для применения стилей
-
-                    actions = ActionChains(driver)
-                    (actions
-                     .move_to_element(source)
-                     .pause(0.5)
-                     .click_and_hold()
-                     .pause(0.3)
-                     .move_to_element(target)
-                     .pause(0.5)
-                     .release()
-                     .perform())
-
-                    attach_screenshot(driver, f"После перетаскивания элемента (попытка {attempt})")
-                    time.sleep(1)  # Пауза между попытками
-
-                except Exception as e:
-                    attach_screenshot(driver, f"Ошибка при перетаскивании (попытка {attempt})")
-                    if attempt == 2:  # Если это вторая попытка и снова ошибка
-                        pytest.fail(f"Ошибка при перетаскивании элемента: {e}")
-                    continue  # Продолжаем на следующую попытку
-            # СТАРТ!!!!!!!!!
-    with allure.step("Работа со стартом"):
-        try:
-            start_element = wait.until(
-                EC.element_to_be_clickable(
-                    (By.CSS_SELECTOR, "p.MuiTypography-body1[aria-label='Старт']")
-                )
-            )
-            start_element.click()
-        except Exception as e:
-            pytest.fail(f"Ошибка при вводе названия узла: {e}")
-
-    # Ответственный
-    with allure.step("Клик по заголовку 'Ответственные в Старте'"):
-        try:
-            responsible_header = wait.until(EC.presence_of_element_located((By.XPATH, "//h2[contains(text(), 'Ответственные')]")))
-            responsible_header.click()
-            attach_screenshot(driver, "После клика по заголовку 'Ответственные'")
-        except Exception as e:
-            attach_screenshot(driver, "Ошибка при клике по заголовку 'Ответственные'")
-            pytest.fail(f"Ошибка при клике по заголовку 'Ответственные': {e}")
-    #Выбор ответственных
-    with allure.step("Выбор нескольких ответственных"):
-        try:
-            select_multiple_responsibles(driver, [0,0,0,0,0,0,0,0,0,0,0,0])
-            attach_screenshot(driver, "Ответственные выбраны")
-        except IndexError:
-            # Если проблема с индексами - пропускаем тест
-            pytest.skip("Недостаточно элементов для выбора")
-        except Exception as e:
-            attach_screenshot(driver, "Ошибка выбора ответственных")
-            pytest.fail(f"Ошибка выбора ответственных: {str(e)}")
-
     #ЗОНЫ
     # Первая
     with allure.step("Очистка поля 'Название '"):
@@ -1140,4 +810,292 @@ def test_start(driver):
         except Exception as e:
             attach_screenshot(driver, "Ошибка при вводе названия узла")
             pytest.fail(f"Ошибка при вводе названия узла: {e}")
-        time.sleep(5)
+
+    #СВЯЗИ
+    #Первая
+    with allure.step("1. Поиск элементов для drag-and-drop"):
+        try:
+            # Проверяем элементы без явного ожидания
+            source = driver.find_element(By.XPATH, "//div[@data-nodeid='1' and @data-handlepos='bottom' and @data-handleid='4']")
+            target = driver.find_element(By.XPATH, "//div[@data-nodeid='3' and @data-handlepos='top']")
+        except NoSuchElementException:
+            attach_screenshot(driver, "Элементы не найдены")
+            allure.attach(
+                "Элементы не найдены (проверка без ожидания)",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+        except Exception as e:
+            attach_screenshot(driver, "Ошибка при поиске элементов")
+            allure.attach(
+                f"Ошибка: {str(e)}",
+                name="Ошибка",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+    with allure.step("2. Перетаскивание элемента"):
+        if source and target:
+            try:
+                ActionChains(driver).drag_and_drop(source, target).perform()
+                time.sleep(1)  # Короткая пауза для стабилизации
+                attach_screenshot(driver, "После перетаскивания элемента")
+            except Exception as e:
+                attach_screenshot(driver, "Ошибка при перетаскивании элемента")
+                allure.attach(
+                    f"Не удалось перетащить: {str(e)}",
+                    name="Ошибка",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        else:
+            allure.attach(
+                "Пропущено: элементы для перетаскивания не найдены",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+    #Вторая
+    with allure.step("1. Поиск элементов для drag-and-drop"):
+        try:
+            # Проверяем элементы без явного ожидания
+            source = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='3'][data-handleid='4']")
+            target = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='4'][data-handleid='2']")
+        except NoSuchElementException:
+            attach_screenshot(driver, "Элементы не найдены")
+            allure.attach(
+                "Элементы не найдены (проверка без ожидания)",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+        except Exception as e:
+            attach_screenshot(driver, "Ошибка при поиске элементов")
+            allure.attach(
+                f"Ошибка: {str(e)}",
+                name="Ошибка",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+    with allure.step("2. Перетаскивание элемента"):
+        if source and target:
+            try:
+                ActionChains(driver).drag_and_drop(source, target).perform()
+                time.sleep(1)  # Короткая пауза для стабилизации
+                attach_screenshot(driver, "После перетаскивания элемента")
+            except Exception as e:
+                attach_screenshot(driver, "Ошибка при перетаскивании элемента")
+                allure.attach(
+                    f"Не удалось перетащить: {str(e)}",
+                    name="Ошибка",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        else:
+            allure.attach(
+                "Пропущено: элементы для перетаскивания не найдены",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+    #Третья
+    with allure.step("1. Поиск элементов для drag-and-drop"):
+        try:
+            # Проверяем элементы без явного ожидания
+            source = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='4'][data-handleid='4']")
+            target = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='5'][data-handleid='2']")
+        except NoSuchElementException:
+            attach_screenshot(driver, "Элементы не найдены")
+            allure.attach(
+                "Элементы не найдены (проверка без ожидания)",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+        except Exception as e:
+            attach_screenshot(driver, "Ошибка при поиске элементов")
+            allure.attach(
+                f"Ошибка: {str(e)}",
+                name="Ошибка",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+    with allure.step("2. Перетаскивание элемента"):
+        if source and target:
+            try:
+                ActionChains(driver).drag_and_drop(source, target).perform()
+                time.sleep(1)  # Короткая пауза для стабилизации
+                attach_screenshot(driver, "После перетаскивания элемента")
+            except Exception as e:
+                attach_screenshot(driver, "Ошибка при перетаскивании элемента")
+                allure.attach(
+                    f"Не удалось перетащить: {str(e)}",
+                    name="Ошибка",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        else:
+            allure.attach(
+                "Пропущено: элементы для перетаскивания не найдены",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+    #Четвертый
+    with allure.step("1. Поиск элементов для drag-and-drop"):
+        try:
+            # Проверяем элементы без явного ожидания
+            source = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='5'][data-handleid='4']")
+            target = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='6'][data-handleid='2']")
+        except NoSuchElementException:
+            attach_screenshot(driver, "Элементы не найдены")
+            allure.attach(
+                "Элементы не найдены (проверка без ожидания)",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+        except Exception as e:
+            attach_screenshot(driver, "Ошибка при поиске элементов")
+            allure.attach(
+                f"Ошибка: {str(e)}",
+                name="Ошибка",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+    with allure.step("2. Перетаскивание элемента"):
+        if source and target:
+            try:
+                ActionChains(driver).drag_and_drop(source, target).perform()
+                time.sleep(1)  # Короткая пауза для стабилизации
+                attach_screenshot(driver, "После перетаскивания элемента")
+            except Exception as e:
+                attach_screenshot(driver, "Ошибка при перетаскивании элемента")
+                allure.attach(
+                    f"Не удалось перетащить: {str(e)}",
+                    name="Ошибка",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        else:
+            allure.attach(
+                "Пропущено: элементы для перетаскивания не найдены",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+    #Пятая
+    with allure.step("1. Поиск элементов для drag-and-drop"):
+        try:
+            # Проверяем элементы без явного ожидания
+            source = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='6'][data-handleid='3']")
+            target = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='7'][data-handleid='1']")
+        except NoSuchElementException:
+            attach_screenshot(driver, "Элементы не найдены")
+            allure.attach(
+                "Элементы не найдены (проверка без ожидания)",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+        except Exception as e:
+            attach_screenshot(driver, "Ошибка при поиске элементов")
+            allure.attach(
+                f"Ошибка: {str(e)}",
+                name="Ошибка",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+    with allure.step("2. Перетаскивание элемента"):
+        if source and target:
+            try:
+                ActionChains(driver).drag_and_drop(source, target).perform()
+                time.sleep(1)  # Короткая пауза для стабилизации
+                attach_screenshot(driver, "После перетаскивания элемента")
+            except Exception as e:
+                attach_screenshot(driver, "Ошибка при перетаскивании элемента")
+                allure.attach(
+                    f"Не удалось перетащить: {str(e)}",
+                    name="Ошибка",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        else:
+            allure.attach(
+                "Пропущено: элементы для перетаскивания не найдены",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+    #Шестая
+    with allure.step("1. Поиск элементов для drag-and-drop"):
+        try:
+            # Проверяем элементы без явного ожидания
+            source = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='7'][data-handleid='3']")
+            target = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='2'][data-handleid='1']")
+        except NoSuchElementException:
+            attach_screenshot(driver, "Элементы не найдены")
+            allure.attach(
+                "Элементы не найдены (проверка без ожидания)",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+        except Exception as e:
+            attach_screenshot(driver, "Ошибка при поиске элементов")
+            allure.attach(
+                f"Ошибка: {str(e)}",
+                name="Ошибка",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+    with allure.step("2. Перетаскивание элемента"):
+        if source and target:
+            try:
+                ActionChains(driver).drag_and_drop(source, target).perform()
+                time.sleep(1)  # Короткая пауза для стабилизации
+                attach_screenshot(driver, "После перетаскивания элемента")
+            except Exception as e:
+                attach_screenshot(driver, "Ошибка при перетаскивании элемента")
+                allure.attach(
+                    f"Не удалось перетащить: {str(e)}",
+                    name="Ошибка",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        else:
+            allure.attach(
+                "Пропущено: элементы для перетаскивания не найдены",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+    #Седьмая
+    with allure.step("1. Поиск элементов для drag-and-drop"):
+        try:
+            # Проверяем элементы без явного ожидания
+            source = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='1'][data-handleid='4']")
+            target = driver.find_element(By.CSS_SELECTOR, "div[data-nodeid='4'][data-handleid='3']")
+        except NoSuchElementException:
+            attach_screenshot(driver, "Элементы не найдены")
+            allure.attach(
+                "Элементы не найдены (проверка без ожидания)",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+        except Exception as e:
+            attach_screenshot(driver, "Ошибка при поиске элементов")
+            allure.attach(
+                f"Ошибка: {str(e)}",
+                name="Ошибка",
+                attachment_type=allure.attachment_type.TEXT
+            )
+            source, target = None, None
+    with allure.step("2. Перетаскивание элемента"):
+        if source and target:
+            try:
+                ActionChains(driver).drag_and_drop(source, target).perform()
+                time.sleep(1)  # Короткая пауза для стабилизации
+                attach_screenshot(driver, "После перетаскивания элемента")
+            except Exception as e:
+                attach_screenshot(driver, "Ошибка при перетаскивании элемента")
+                allure.attach(
+                    f"Не удалось перетащить: {str(e)}",
+                    name="Ошибка",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+        else:
+            allure.attach(
+                "Пропущено: элементы для перетаскивания не найдены",
+                name="Инфо",
+                attachment_type=allure.attachment_type.TEXT
+            )

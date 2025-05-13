@@ -32,6 +32,7 @@ def test_process_flow(driver):
     try:
         with allure.step("Клик по иконке настроек"):
             # Ожидаем и кликаем по иконке Нстроек
+            time.sleep(1)
             settings_icon = wait.until(EC.element_to_be_clickable(
                 (By.CSS_SELECTOR, '[aria-label="Настройки"]')))
             driver.execute_script("""
@@ -486,9 +487,17 @@ def test_process_flow(driver):
         element = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, "//h6[contains(., 'Участники')]")))
     element.click()
-    button = WebDriverWait(driver, 20).until(
-        EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Добавить')]")))
-    button.click()
+    with allure.step("Пробуем нажать 'Добавить' или 'Изменить'"):
+        try:
+            button = WebDriverWait(driver, 5).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Добавить')]")))
+            button.click()
+            print("Нажата кнопка 'Добавить'")
+        except:
+            button = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Изменить')]")))
+            button.click()
+            print("Кнопка 'Добавить' не найдена, нажата 'Изменить'")
     with allure.step("Вадим"):
         checkbox = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located(
