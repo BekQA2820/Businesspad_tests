@@ -21,7 +21,7 @@ def test_process_flow(driver):
     with allure.step("1. Авторизация"):
         driver.get("https://finance.business-pad.com/")
         driver.find_element(By.ID, ":r0:").send_keys("adminbp")
-        driver.find_element(By.ID, ":r1:").send_keys("AtVFpd3hFeEc" + Keys.RETURN)
+        driver.find_element(By.ID, ":r1:").send_keys("" + Keys.RETURN) # вставь пароль
         attach_screenshot(driver, "После логина")
         time.sleep(1)
     try:

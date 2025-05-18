@@ -28,7 +28,7 @@ def test_start(driver):
         try:
             driver.get("https://testbp1.business-pad.com/")
             driver.find_element(By.XPATH, '//*[@id=":r0:"]').send_keys("adminbp")
-            driver.find_element(By.XPATH, '//*[@id=":r1:"]').send_keys("TUqHXP79irZd")
+            driver.find_element(By.XPATH, '//*[@id=":r1:"]').send_keys("") # вставь пароль
             driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/div/div/div[2]/div/form/div/div[4]').click()
             attach_screenshot(driver, "После логина")
         except Exception as e:

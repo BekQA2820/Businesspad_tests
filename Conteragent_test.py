@@ -56,7 +56,7 @@ def test_add_and_edit_counteragent(driver):
     # Вход в систему
 
     driver.find_element(By.XPATH, '//*[@id=":r0:"]').send_keys("K.Bekir")
-    driver.find_element(By.XPATH, '//*[@id=":r1:"]').send_keys("Team.Bekir")
+    driver.find_element(By.XPATH, '//*[@id=":r1:"]').send_keys("") # вставь пароль
     driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/div/div/div[2]/div/form/div/div[4]').click()
 
     wait = WebDriverWait(driver, 10)
