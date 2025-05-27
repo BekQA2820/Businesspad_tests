@@ -28,7 +28,7 @@ def test_start(driver):
     with allure.step("Открываем сайт и логинимся"):
         driver.get("https://finance.business-pad.com/")
         # Вход в систему
-        driver.find_element(By.XPATH, '//*[@id=":r0:"]').send_keys("adminbp")
+        driver.find_element(By.XPATH, '//*[@id=":r0:"]').send_keys("adminbp1")
         driver.find_element(By.XPATH, '//*[@id=":r1:"]').send_keys("") # вставь пароль
         driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/div/div/form/div/button').click()
 
